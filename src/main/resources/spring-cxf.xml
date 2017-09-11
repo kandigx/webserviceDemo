@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cxf="http://cxf.apache.org/core"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+        http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
+
+    <bean id="wss4jInInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+        <constructor-arg>
+            <map>
+                <!--用户认证（明文）-->
+                <!--<entry key="action" value="UsernameToken"/>-->
+                <!--<entry key="passwordType" value="PasswordDigest"/>-->
+                <!--验签（使用对方的公钥）-->
+                <entry key="action" value="Signature Encrypt"/>
+                <entry key="passwordCallbackRef" value-ref="serverPasswordCallback"/>
+                <entry key="signatureVerificationPropFile" value="server.properties"/>
+                <entry key="decryptionPropFile" value="server.properties"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <!--服务端接收请求拦截器-->
+    <jaxws:endpoint id="helloService" implementor="demo.ws.soap_spring_cxf.HelloServiceImpl" address="/soap/hello">
+        <jaxws:inInterceptors>
+            <ref bean="wss4jInInterceptor"/>
+        </jaxws:inInterceptors>
+        <jaxws:outInterceptors>
+            <ref bean="wss4jOutInterceptor"/>
+        </jaxws:outInterceptors>
+    </jaxws:endpoint>
+
+    <!--服务端发送请求拦截器-->
+    <bean id="wss4jOutInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+        <constructor-arg>
+            <map>
+                <!--签名 加密-->
+                <entry key="action" value="Signature Encrypt"/>
+                <entry key="user" value="ciecc"/>
+                <entry key="passwordCallbackClass" value="demo.ws.soap_spring_cxf_wss4j.SenderPasswordCallback"/>
+                <entry key="signaturePropFile" value="client.properties"/>
+                <entry key="encryptionPropFile" value="client.properties"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <cxf:bus>
+        <cxf:features>
+            <cxf:logging/>
+        </cxf:features>
+    </cxf:bus>
+
+</beans>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="signatureUser" class="demo.ws.soap_spring_cxf_wss4j.SignatureUser">
+        <property name="userMap">
+            <map>
+                <entry key="ciecc" value="cieccPassword"/>
+                <entry key="zibo" value="sEUNIdaQwa9xreLTyq8e95ymYoNjLyTu"/>
+            </map>
+        </property>
+    </bean>
+
+</beans>
