@@ -1,15 +1,13 @@
-package demo.ws.soap_spring_cxf_wss4j;
-
-import org.springframework.stereotype.Component;
+package ciecc.swzf.common.security;
 
 import java.util.Map;
 
 /**
- * @author Kang
- * @create 2017-09-11 15:49
+ * @author kandigx
+ * @create 2017-09-14 9:53
  */
-@Component
-public class SignatureUser {
+public class Signature {
+
 
     private Map<String, String> userMap;
 
@@ -20,4 +18,5 @@ public class SignatureUser {
     public void setUserMap(Map<String, String> userMap) {
         this.userMap = userMap;
     }
+
 }

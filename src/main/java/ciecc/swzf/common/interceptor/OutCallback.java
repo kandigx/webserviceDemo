@@ -1,7 +1,6 @@
-package demo.ws.soap_spring_cxf_wss4j;
+package ciecc.swzf.common.interceptor;
 
 import org.apache.wss4j.common.ext.WSPasswordCallback;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.security.auth.callback.Callback;
@@ -10,24 +9,14 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import java.io.IOException;
 
 /**
- * @author Kang
- * @create 2017-09-06 14:34
+ * @author kandigx
+ * @create 2017-09-13 10:24
  */
 @Component
-public class ServerPasswordCallback implements CallbackHandler {
-
-    @Autowired
-    private SignatureUser user;
+public class OutCallback implements CallbackHandler {
 
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-
         WSPasswordCallback callback = (WSPasswordCallback) callbacks[0];
-
-        String clientUsername = callback.getIdentifier();
-        String serverPassword = user.getUserMap().get(clientUsername);
-        if (serverPassword != null) {
-            callback.setPassword(serverPassword);
-        }
-
+        callback.setPassword("Hfzx7bx5B7GqQALUnRao3B612QNq0pAP"); //
     }
 }
