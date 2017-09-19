@@ -45,6 +45,6 @@ public class ErrorMsgVO {
 
     @Override
     public String toString() {
-        return errorCode + "(" + errorDescr + "): "+ detail;
+        return errorCode + "(" + errorDescr + ") "+ detail + "\n";
     }
 }

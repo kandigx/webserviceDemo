@@ -83,8 +83,13 @@ public class AdditionalRecodingCaseServiceImpl implements AdditionalRecodingCase
         //根据 userCode 获取用户
         User user = userDao.getByUserCode(baseCase.getUserCode());
         if (user == null) {
-            errorList.add(new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_NOT_EXIST_USERCODE,
-                    PromptMessageConsts.ERROR_DESCR_NOT_EXIST_USERCODE, "userCode: " + baseCase.getUserCode()));
+            ErrorMsgVO vo = new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_NOT_EXIST_USERCODE,
+                    PromptMessageConsts.ERROR_DESCR_NOT_EXIST_USERCODE, "userCode: " + baseCase.getUserCode());
+            StringBuilder returnMsg = new StringBuilder();
+            for (ErrorMsgVO error : errorList){
+                returnMsg.append(error.toString());
+            }
+            return returnMsg.toString();
         }
         //根据 opManName 获取执法员信息，将执法员id放入 opMan
         Map<String,ZlawPeo> zlawPeoMap = zlawPeoDao.getZlawPeoMapByNameList(user.getRecordId(), Arrays.asList(baseCase.getOpManName().split(",")));
@@ -143,12 +148,12 @@ public class AdditionalRecodingCaseServiceImpl implements AdditionalRecodingCase
             //未选择处罚种类
             if (flag == 0) {
                 errorList.add(new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_CHECK_RESULT_ILLEGAL_UNCHECK,
-                        PromptMessageConsts.ERROR_CODE_CHECK_RESULT_ILLEGAL_UNCHECK, null));
+                        PromptMessageConsts.ERROR_DESCR_CHECK_RESULT_ILLEGAL_UNCHECK, "checkResult: " + baseCase.getCheckResult() ));
             }
             //处罚金额为空
             if (Boolean.parseBoolean(baseCase.getPunTypeFk()) && baseCase.getChuFaMoney() == null) {
                 errorList.add(new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_CHECK_RESULT_ILLEGAL_NULL_FINE,
-                        PromptMessageConsts.ERROR_DESCR_CHECK_RESULT_ILLEGAL_NULL_FINE, null));
+                        PromptMessageConsts.ERROR_DESCR_CHECK_RESULT_ILLEGAL_NULL_FINE, "chuFaMoney: " + baseCase.getChuFaMoney()));
             }
 
         }else{
