@@ -9,7 +9,8 @@
         http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
 
     <!-- 发布服务 -->
-    <jaxws:endpoint id="zBaseCaseService" implementor="ciecc.swzf.zbasecase.service.impl.ZBaseCaseServiceImpl" address="/zBaseCase">
+    <jaxws:endpoint id="additionalRecodingCaseService" implementor="ciecc.swzf.zbasecase.service.impl.AdditionalRecodingCaseServiceImpl"
+                    address="/additionalRecodingCase">
         <jaxws:inInterceptors>
             <ref bean="inInterceptor"/>
         </jaxws:inInterceptors>

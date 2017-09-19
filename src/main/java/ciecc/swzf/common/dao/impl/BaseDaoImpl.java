@@ -1,12 +1,14 @@
 package ciecc.swzf.common.dao.impl;
 
 import ciecc.swzf.common.dao.BaseDao;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 /**
  * @author kandigx
@@ -44,4 +46,14 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
     public T get(String id) {
         return this.getHibernateTemplate().get(getClazz(),id);
     }
+
+    public List<T> list(String hql, Object... args){
+        Query query=this.getSessionFactory().getCurrentSession().createQuery(hql);
+        for (int i = 0; i < args.length; i++) {
+            query.setParameter(i, args[i]);
+        }
+        List<T> list=query.list();
+        return list;
+    }
+
 }

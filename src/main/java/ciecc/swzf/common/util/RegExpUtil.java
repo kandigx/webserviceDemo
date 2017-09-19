@@ -17,7 +17,7 @@ public class RegExpUtil {
      * @return
      */
     public static boolean isDateFormatter(String str){
-        if(str.matches("^\\d{4}-\\d{2}-\\d{2}$")){
+        if(str != null && str.matches("^\\d{4}-\\d{2}-\\d{2}$")){
             return true;
         }
         return false;

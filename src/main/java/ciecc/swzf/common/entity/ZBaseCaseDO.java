@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 案件基本信息 DO
+ * 案件基本信息表
  * @author kandigx
  * @create 2017-09-13 10:21
  */
@@ -126,13 +126,13 @@ public class ZBaseCaseDO implements Serializable {
     @Column(name = "JIEAN_TIME", nullable = false)
     private Date jieanTime; //结案或移送完成时间
 
-    @Column(name = "OP_MAN_NAME", length = 3000)
+    @Column(name = "OP_MAN_NAME", nullable = false,length = 3000)
     private String opManName; //办案人名称
 
     @Column(name = "CHECK_RESULT", length = 1, nullable = false)
     private String checkResult; //检查结果（0是合规，1是违规，2是整改，3是未检查成功）
 
-    @Column(name = "CHU_FA_MONEY", length = 20, precision = 4)
+    @Column(name = "CHU_FA_MONEY", precision = 20, scale = 4)
     private Double chuFaMoney; //处罚金额
 
     @Column(name = "AN_JIAN_SHUO_MING", length = 4000, nullable = false)

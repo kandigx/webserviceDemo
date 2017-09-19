@@ -1,6 +1,6 @@
 package ciecc.swzf.zbasecase.service;
 
-import ciecc.swzf.common.entity.ZBaseCaseDO;
+import ciecc.swzf.common.entity.CaseDTO;
 
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -10,8 +10,8 @@ import javax.jws.WebService;
  * @create 2017-09-13 16:39
  */
 @WebService
-public interface ZBaseCaseService {
+public interface AdditionalRecodingCaseService {
 
-    String transferZBaseCase(@WebParam(name = "baseCase") ZBaseCaseDO baseCase);
+    String transferZBaseCase(@WebParam(name = "baseCase") CaseDTO baseCase);
 
 }
