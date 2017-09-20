@@ -27,7 +27,7 @@ public class ReflectionUtil {
      * @return
      */
     public static List<ErrorMsgVO> DOColumnConstraint(Class clazz, Object obj) throws IllegalAccessException{
-        List<ErrorMsgVO> columnConstraintErrorList = new ArrayList<>();
+        List<ErrorMsgVO> columnConstraintErrorList = new ArrayList<ErrorMsgVO>();
 
         //获取属性域数组
         Field[] fields = clazz.getDeclaredFields();
@@ -58,23 +58,20 @@ public class ReflectionUtil {
                 //获取属性值
                 Object value = field.get(obj);
                 if (!nullable && value == null) {
-                    columnConstraintErrorList.add(new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_INCOMPLETED,
-                            PromptMessageConsts.ERROR_DESCR_INCOMPLETED,field.getName() + " 字段不能为空！"));
+                    columnConstraintErrorList.add(new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_INCOMPLETED,field.getName() + "字段不能为空!"));
                 }
                 // 字符类型 或 Double 类型，验证长度
                 if (value != null){
                     if ("java.lang.String".equals(type) && !RegExpUtil.strMaxLength(value, maxLength)) {
                         columnConstraintErrorList.add(new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_LENGTH_OUT_OF_RANGE,
-                                PromptMessageConsts.ERROR_DESCR_LENGTH_OUT_OF_RANGE,
-                                field.getName() + " 长度超出范围！最大长度：" + maxLength + " ,实际长度："
+                                field.getName() + "最大长度" + maxLength + "实际长度"
                                 + RegExpUtil.ChinesePhraselength(value.toString())));
 
                     } else if ("java.lang.Double".equals(type)
                             && !RegExpUtil.isDecimalPrecision(df.format(value),precision,scale)){
                         columnConstraintErrorList.add(new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_LENGTH_OUT_OF_RANGE,
-                                PromptMessageConsts.ERROR_DESCR_LENGTH_OUT_OF_RANGE,
-                                field.getName() + " 长度超出范围！最大长度：" + precision + " ,精度: "
-                                        + scale + " ,实际值：" + df.format(value)));
+                                field.getName() + "最大长度" + precision + "精度"
+                                        + scale + "实际值" + df.format(value)));
                     }
                 }
             }

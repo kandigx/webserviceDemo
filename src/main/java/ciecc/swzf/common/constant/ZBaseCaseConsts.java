@@ -93,7 +93,7 @@ public class ZBaseCaseConsts {
     public static final String TUNIT_TYPE_INDIVIDUAL = "0"; //0:个人
     public static final String TUNIT_TYPE_BUSINESS = "1"; //1:企业
 
-    //处罚类型选项
+    //true false
     public static final String FALSE = "false";
     public static final String TRUE = "true";
 

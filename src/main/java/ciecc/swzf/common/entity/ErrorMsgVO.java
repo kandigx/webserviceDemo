@@ -1,5 +1,7 @@
 package ciecc.swzf.common.entity;
 
+import ciecc.swzf.common.constant.PromptMessageConsts;
+
 /**
  * @author kandigx
  * @create 2017-09-19 16:41
@@ -37,6 +39,12 @@ public class ErrorMsgVO {
     public ErrorMsgVO() {
     }
 
+    public ErrorMsgVO(String errorCode, String detail) {
+        this.errorCode = errorCode;
+        this.errorDescr = PromptMessageConsts.getErrorMsgMap().get(errorCode);
+        this.detail = detail;
+    }
+
     public ErrorMsgVO(String errorCode, String errorDescr, String detail) {
         this.errorCode = errorCode;
         this.errorDescr = errorDescr;
@@ -45,6 +53,6 @@ public class ErrorMsgVO {
 
     @Override
     public String toString() {
-        return errorCode + "(" + errorDescr + ") "+ detail + "\n";
+        return errorCode + ":" + detail;
     }
 }

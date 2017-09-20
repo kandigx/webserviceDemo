@@ -22,7 +22,7 @@ public class ZlawPeoDaoImpl extends BaseDaoImpl<ZlawPeo> implements ZlawPeoDao {
      * @return Map<name,id>
      */
     public Map<String,ZlawPeo> getZlawPeoMapByNameList(String areaCode, List<String > nameList){
-        Map<String, ZlawPeo> map = new HashMap<>();
+        Map<String, ZlawPeo> map = new HashMap<String, ZlawPeo>();
         for (String name : nameList) {
             ZlawPeo person = listByAreaCodeAndName(areaCode,name.trim());
             map.put(name,person);

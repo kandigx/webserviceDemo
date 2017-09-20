@@ -6,6 +6,7 @@ import ciecc.swzf.common.dao.UserDao;
 import ciecc.swzf.common.dao.ZlawPeoDao;
 import ciecc.swzf.common.entity.*;
 import ciecc.swzf.common.util.ConcurrentDateUtil;
+import ciecc.swzf.common.util.JsonMsgUtils;
 import ciecc.swzf.common.util.ReflectionUtil;
 import ciecc.swzf.common.util.RegExpUtil;
 import ciecc.swzf.zbasecase.dao.ZBaseCaseDao;
@@ -50,8 +51,8 @@ public class AdditionalRecodingCaseServiceImpl implements AdditionalRecodingCase
         if (!RegExpUtil.isDateFormatter(baseCase.getReportDate()) ||
                 !RegExpUtil.isDateFormatter(baseCase.getJieanDate())) {
             errorList.add(new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_DATE_INCORRECT_FORMAT,
-                    PromptMessageConsts.ERROR_DESCR_DATE_INCORRECT_FORMAT,"ReportDate: " + baseCase.getReportDate()
-                    + "; JieanDate: " + baseCase.getJieanDate()));
+                    "ReportDate=" + baseCase.getReportDate()
+                    + " JieanDate=" + baseCase.getJieanDate()));
         }
 
         //检查结果验证
@@ -82,33 +83,32 @@ public class AdditionalRecodingCaseServiceImpl implements AdditionalRecodingCase
 
         //根据 userCode 获取用户
         User user = userDao.getByUserCode(baseCase.getUserCode());
-        if (user == null) {
-            ErrorMsgVO vo = new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_NOT_EXIST_USERCODE,
-                    PromptMessageConsts.ERROR_DESCR_NOT_EXIST_USERCODE, "userCode: " + baseCase.getUserCode());
-            StringBuilder returnMsg = new StringBuilder();
-            for (ErrorMsgVO error : errorList){
-                returnMsg.append(error.toString());
-            }
-            return returnMsg.toString();
-        }
-        //根据 opManName 获取执法员信息，将执法员id放入 opMan
-        Map<String,ZlawPeo> zlawPeoMap = zlawPeoDao.getZlawPeoMapByNameList(user.getRecordId(), Arrays.asList(baseCase.getOpManName().split(",")));
         List<String> idList = new ArrayList<>();
-        for (Map.Entry entry : zlawPeoMap.entrySet()){
-            if (entry.getValue() == null) {
-                errorList.add(new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_NOT_EXIST_OPERATION_PERSON,
-                        PromptMessageConsts.ERROR_DESCR_NOT_EXIST_OPERATION_PERSON, "opManName: " + entry.getKey()));
+        if (user == null) {
+            errorList.add(new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_NOT_EXIST_USERCODE,
+                    "userCode=" + baseCase.getUserCode()));
+        } else {
+            //根据 opManName 获取执法员信息，将执法员id放入 opMan
+            Map<String,ZlawPeo> zlawPeoMap = zlawPeoDao.getZlawPeoMapByNameList(user.getRecordId(), Arrays.asList(baseCase.getOpManName().split(",")));
+            for (Map.Entry entry : zlawPeoMap.entrySet()){
+                if (entry.getValue() == null) {
+                    errorList.add(new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_NOT_EXIST_OPERATION_PERSON,
+                            "opManName=" + entry.getKey()));
+                    continue;
+                }
+                idList.add(((ZlawPeo) entry.getValue()).getId());
             }
-            idList.add(((ZlawPeo) entry.getValue()).getId());
         }
-
         //有错误直接返回
         if (errorList.size() > 0) {
             StringBuilder returnMsg = new StringBuilder();
-            for (ErrorMsgVO vo : errorList){
-                returnMsg.append(vo.toString());
+            for (int i = 0 ; i < errorList.size(); i++){
+                if (i > 0) {
+                    returnMsg.append(", ");
+                }
+                returnMsg.append(errorList.get(i).toString());
             }
-            return returnMsg.toString();
+            return JsonMsgUtils.returnJsonMsg(ZBaseCaseConsts.FALSE,returnMsg.toString());
         }
 
         //逗号分隔符分隔id
@@ -123,7 +123,7 @@ public class AdditionalRecodingCaseServiceImpl implements AdditionalRecodingCase
         caseDO.setIsYisong(ZBaseCaseConsts.TRANSFER_NO);//非移送案件
         caseDO.setIsDel(ZBaseCaseConsts.DELETABLE_FALSE); //未删除
         zBaseCaseDao.save(caseDO);
-        return PromptMessageConsts.MSG_SAVED_SUCCESSFULLY;
+        return JsonMsgUtils.returnJsonMsg(ZBaseCaseConsts.TRUE,PromptMessageConsts.MSG_SAVED_SUCCESSFULLY);
     }
 
     /**
@@ -148,12 +148,12 @@ public class AdditionalRecodingCaseServiceImpl implements AdditionalRecodingCase
             //未选择处罚种类
             if (flag == 0) {
                 errorList.add(new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_CHECK_RESULT_ILLEGAL_UNCHECK,
-                        PromptMessageConsts.ERROR_DESCR_CHECK_RESULT_ILLEGAL_UNCHECK, "checkResult: " + baseCase.getCheckResult() ));
+                        "checkResult=" + baseCase.getCheckResult() ));
             }
             //处罚金额为空
             if (Boolean.parseBoolean(baseCase.getPunTypeFk()) && baseCase.getChuFaMoney() == null) {
                 errorList.add(new ErrorMsgVO(PromptMessageConsts.ERROR_CODE_CHECK_RESULT_ILLEGAL_NULL_FINE,
-                        PromptMessageConsts.ERROR_DESCR_CHECK_RESULT_ILLEGAL_NULL_FINE, "chuFaMoney: " + baseCase.getChuFaMoney()));
+                        "chuFaMoney=" + baseCase.getChuFaMoney()));
             }
 
         }else{
