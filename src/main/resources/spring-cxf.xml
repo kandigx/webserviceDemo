@@ -14,9 +14,6 @@
         <jaxws:inInterceptors>
             <ref bean="inInterceptor"/>
         </jaxws:inInterceptors>
-        <!--<jaxws:outInterceptors>-->
-            <!--<ref bean="wss4jOutInterceptor"/>-->
-        <!--</jaxws:outInterceptors>-->
     </jaxws:endpoint>
 
     <!--接收加密信息后解密-->

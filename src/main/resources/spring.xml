@@ -13,8 +13,7 @@
     <context:property-placeholder location="classpath:application.properties"/>
 
     <context:component-scan base-package="ciecc.swzf"/>
-    <context:component-scan base-package="ciecc.swzf.*.*.*"/>
-    <!--<context:component-scan base-package="demo.ws"/>-->
+    <context:component-scan base-package="ciecc.swzf.*.*"/>
 
     <tx:annotation-driven/>
 
